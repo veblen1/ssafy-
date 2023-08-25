@@ -10,16 +10,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.project.sharedpreferences.SharedPreferencesUtil
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
 val customBackgroundColor = Color(240, 245, 250)
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val sharedPreferencesUtil by lazy { SharedPreferencesUtil(this) }
@@ -48,7 +50,7 @@ fun AppNavigation(sharedPreferencesUtil: SharedPreferencesUtil) {
             }
             Box(modifier = Modifier.weight(1f)) {
                 NavHost(navController, startDestination = startDestination) {
-                    composable("Login") { LoginPage(navController, viewModel = viewModel()) }
+                    composable("Login") { LoginPage(navController) }
                     composable("SignUp") { SignUpPage(navController) }
                     composable("Home") { MainContentScrollable() }
                     composable("AccountPage") { AccountPage() }

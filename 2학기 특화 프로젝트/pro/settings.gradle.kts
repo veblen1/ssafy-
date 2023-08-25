@@ -5,7 +5,11 @@ pluginManagement {
         maven { url = uri("https://jitpack.io") }
         gradlePluginPortal()
     }
+    plugins {
+        id("dagger.hilt.android.plugin") version "2.44"
+    }
 }
+
 dependencyResolutionManagement {
     repositories {
         google()

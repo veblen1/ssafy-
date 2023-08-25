@@ -3,17 +3,19 @@ package com.example.project
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import com.example.project.viewmodels.BiometricViewModel
 import com.example.project.viewmodels.AuthenticationState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BiometricPromptDialogFragment : DialogFragment() {
 
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
-    private val viewModel: BiometricViewModel by activityViewModels()
+    private val viewModel: BiometricViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         initBiometricPrompt()
