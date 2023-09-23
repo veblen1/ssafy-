@@ -1,5 +1,6 @@
 package com.example.project
 
+import androidx.biometric.BiometricPrompt
 import com.example.project.viewmodels.BiometricViewModel
 import com.example.project.viewmodels.AuthenticationState
 import androidx.compose.runtime.*
@@ -13,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -52,7 +54,7 @@ fun LoginPage(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
         TemporaryNavigationButtons(navController)
         Spacer(modifier = Modifier.height(16.dp))
-        BiometricAuthenticationButton(fragmentActivity)
+        BiometricAuthenticationButton(fragmentActivity, viewModel)
     }
 }
 
@@ -95,23 +97,62 @@ fun TemporaryNavigationButtons(navController: NavHostController) {
     Button(onClick = { navController.navigate("SignUp") }) {
         Text("회원가입임시")
     }
+    Spacer(modifier = Modifier.height(16.dp))
+    Button(onClick = { navController.navigate("TextloginPage") }) {
+        Text("텍스트로그인임시")
+    }
 }
 
 @Composable
-fun BiometricAuthenticationButton(fragmentActivity: FragmentActivity?) {
-    Button(onClick = { showBiometricPrompt(fragmentActivity) }) {
-        Text("지문인식 임시 세팅")
+fun BiometricAuthenticationButton(fragmentActivity: FragmentActivity?, viewModel: BiometricViewModel) {
+    val biometricPrompt = rememberBiometricPrompt(fragmentActivity, viewModel)
+
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle("Title")
+        .setSubtitle("Subtitle")
+        .setDescription("Description")
+        .setNegativeButtonText("Cancel")
+        .build()
+
+    if (biometricPrompt != null) { // Null check 추가
+        Button(onClick = { biometricPrompt.authenticate(promptInfo) }) {
+            Text("지문인식 임시 세팅")
+        }
     }
 }
 
-fun showBiometricPrompt(activity: FragmentActivity?) {
-    activity?.let {
-        val fragmentManager = it.supportFragmentManager
-        val dialog = BiometricPromptDialogFragment()
-        dialog.show(fragmentManager, "biometricDialog")
+@Composable
+fun rememberBiometricPrompt(
+    fragmentActivity: FragmentActivity?,
+    viewModel: BiometricViewModel
+): BiometricPrompt? {
+    val context = LocalContext.current
+
+    val authenticationCallback = object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+            viewModel.setAuthenticationState(AuthenticationState.ERROR(errString.toString()))
+        }
+
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+            viewModel.setAuthenticationState(AuthenticationState.SUCCESS)
+        }
+
+        override fun onAuthenticationFailed() {
+            viewModel.setAuthenticationState(AuthenticationState.FAILURE)
+        }
+    }
+
+    // fragmentActivity null check 추가
+    return if (fragmentActivity != null) {
+        BiometricPrompt(
+            fragmentActivity,
+            ContextCompat.getMainExecutor(context),
+            authenticationCallback
+        )
+    } else {
+        null
     }
 }
-
 
 // 실패 알람
 @Composable
