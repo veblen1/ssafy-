@@ -239,5 +239,3 @@ https://www.notion.so/API-4d4cb48404974a1cbf8c855438c90e29?pvs=4
 | PgAdmin4            | 5555  |
 | redis (DB)          | 6379  |
 | Jenkins             | 9090  |
-
-
