@@ -109,6 +109,7 @@
 
 <details>
 <summary>4. 랭킹</summary>
+	
 ![Alt text](readmeImg/ranking/ranking1.png)
 ![Alt text](readmeImg/ranking/ranking2.png)
 ![Alt text](readmeImg/ranking/ranking3.png)
@@ -117,6 +118,7 @@
 
 <details>
 <summary>5. 부가 기능</summary>
+	
 ![Alt text](readmeImg/etc/etc1.png)
 ![Alt text](readmeImg/etc/etc2.png)
 ![Alt text](readmeImg/etc/etc3.png)
@@ -239,5 +241,3 @@ https://www.notion.so/API-4d4cb48404974a1cbf8c855438c90e29?pvs=4
 | PgAdmin4            | 5555  |
 | redis (DB)          | 6379  |
 | Jenkins             | 9090  |
-
-
